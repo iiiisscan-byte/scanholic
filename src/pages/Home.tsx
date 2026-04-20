@@ -14,26 +14,26 @@ const heroSlides = [
   {
     id: 2,
     image: 'https://images.unsplash.com/photo-1555421689-491a97ff2040?auto=format&fit=crop&q=80',
-    title: '문서부터 도면까지, 한계 없는 스캐닝',
-    subtitle: '최첨단 장비로 원본의 디테일을 그대로 살려냅니다.'
+    title: '최대 A0 사이즈의 대형 도면과 그림',
+    subtitle: '정밀 도면과 대형 그림을 원본 수준의 고화질로 복원합니다.'
   },
   {
     id: 3,
     image: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80',
-    title: '정밀한 의료/산업용 X-ray 필름 디지털화',
-    subtitle: '산업용 비파괴 검사 필름도 고해상도로 안전하게 변환합니다.'
+    title: '개인과 기업의 기록유산인 사진과 필름',
+    subtitle: '디지털화를 통해 영구히 보존할 수 있습니다.'
   },
   {
     id: 4,
     image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&q=80',
-    title: '표본 디지털화의 새로운 기준',
-    subtitle: '연구 및 보존 목적의 고화질 식물/생물 표본 스캐닝'
+    title: '의료 및 산업현장의 각종 방사선 필름',
+    subtitle: '정밀 판독과 AI 딥러닝을 위해 필수적인 기초 데이터입니다.'
   },
   {
     id: 5,
     image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80',
-    title: 'AI 기반 이미지 처리 및 OCR',
-    subtitle: '단순한 이미지 변환을 넘어, 검색 가능한 데이터로 재탄생시킵니다.'
+    title: '연구기관 및 식물원의 생물표본',
+    subtitle: '학술연구 및 생태정보 환경 구축의 필수 데이터입니다.'
   }
 ];
 
@@ -46,6 +46,7 @@ export function Home() {
   const [contents, setContents] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isPopupOpen, setIsPopupOpen] = useState(true);
 
   const dynamicSlides = contents ? [
     {
@@ -81,12 +82,16 @@ export function Home() {
   ] : heroSlides;
 
   useEffect(() => {
-    // 타임아웃 프로미스 (10초)
+    // 팝업 쿠키 확인 (오늘 하루 보지 않기 등은 생략하고 일단 표시)
+    const hasClosedPopup = localStorage.getItem('hidePopup');
+    if (hasClosedPopup) {
+      setIsPopupOpen(false);
+    }
+
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Request Timeout')), 10000)
     );
 
-    // 콘텐츠 및 서비스 데이터 불러오기
     Promise.race([
       Promise.all([
         fetch('/api/contents').then(res => res.json()),
@@ -100,7 +105,6 @@ export function Home() {
       setIsLoading(false);
     }).catch(err => {
       console.error('Failed to fetch home data:', err);
-      // 실패하더라도 로딩은 해제하여 기본 데이터를 보여줌
       setIsLoading(false);
     });
 
@@ -127,10 +131,19 @@ export function Home() {
       const data = await response.json();
       setChatHistory(prev => [...prev, { role: 'ai', text: data.response }]);
     } catch (error) {
-      setChatHistory(prev => [...prev, { role: 'ai', text: "서버가 아직 준비되지 않았습니다. 파이썬 서버(8000포트)를 실행해 주세요!" }]);
+      setChatHistory(prev => [...prev, { role: 'ai', text: "서버가 아직 준비되지 않았습니다. 파이썬 서버를 확인해 주세요!" }]);
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const closePopupToday = () => {
+    localStorage.setItem('hidePopup', 'true');
+    setIsPopupOpen(false);
   };
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % dynamicSlides.length);
@@ -146,6 +159,32 @@ export function Home() {
 
   return (
     <div className="w-full">
+      {/* 5월 1일 공휴일 팝업 */}
+      <AnimatePresence>
+        {isPopupOpen && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="fixed top-24 left-8 z-[100] w-72 bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200"
+          >
+            <div className="bg-red-600 text-white p-3 flex justify-between items-center">
+              <span className="font-bold">5월 1일 공휴일</span>
+              <button onClick={closePopup}><X className="w-4 h-4" /></button>
+            </div>
+            <div className="p-4 bg-white min-h-[100px]">
+              <p className="text-gray-800 text-sm leading-relaxed">
+                26년 5월 1일은 국가지정 공식 휴무일입니다. 감사합니다
+              </p>
+            </div>
+            <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-[11px] text-gray-500">
+              <button onClick={closePopupToday} className="hover:text-black">오늘 하루 보지 않기</button>
+              <button onClick={closePopup} className="bg-neutral-800 text-white px-4 py-1.5 rounded font-bold">닫기</button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Hero Section */}
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black">
         <AnimatePresence mode="wait">
@@ -215,7 +254,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* Intro Section */}
+      {/* Intro Section - 내용 유지 */}
       <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="text-center max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-5xl font-bold mb-8 tracking-tight">
@@ -245,7 +284,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* Services Preview */}
+      {/* Services Preview - API 호출 주소 수정 상태 유지 */}
       <section className="py-24 bg-white border-y border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-16">
@@ -349,7 +388,6 @@ export function Home() {
           onClick={() => setIsChatOpen(!isChatOpen)}
           className="relative bg-gradient-to-r from-blue-600 to-violet-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center group"
         >
-          {/* 퍼지는 애니메이션 효과 (ping) */}
           <div className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-30 group-hover:opacity-50" style={{ animationDuration: '2s' }} />
           {isChatOpen ? <X className="w-7 h-7 relative z-10" /> : <MessageCircle className="w-7 h-7 relative z-10" />}
         </motion.button>
