@@ -56,33 +56,33 @@ export function ServiceManager() {
       });
 
       if (response.ok) {
-        alert('?�공?�으�??�?�되?�습?�다.');
+        alert('성공적으로 저장되었습니다.');
         handleCloseModal();
         fetchServices();
       } else {
-        alert('?�??�??�류가 발생?�습?�다.');
+        alert('저장 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error(error);
-      alert('?�트?�크 ?�류가 발생?�습?�다.');
+      alert('네트워크 오류가 발생했습니다.');
     }
   };
 
   const handleDelete = async (id: number) => {
-    if (!confirm('?�말 ??��?�시겠습?�까?')) return;
+    if (!confirm('정말 삭제하시겠습니까?')) return;
     try {
       const response = await fetch(`/api/services/${id}`, {
         method: 'DELETE',
       });
       if (response.ok) {
-        alert('?�공?�으�???��?�었?�니??');
+        alert('성공적으로 삭제되었습니다.');
         fetchServices();
       } else {
-        alert('??�� �??�류가 발생?�습?�다.');
+        alert('삭제 중 오류가 발생했습니다.');
       }
     } catch (error) {
       console.error(error);
-      alert('?�트?�크 ?�류가 발생?�습?�다.');
+      alert('네트워크 오류가 발생했습니다.');
     }
   };
 
@@ -97,23 +97,23 @@ export function ServiceManager() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">?��??�화 ?�비??관�?/h1>
+        <h1 className="text-2xl font-bold text-gray-900">디지털화 서비스 관리</h1>
         <button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors" onClick={() => handleOpenModal()}>
-          <Plus className="w-4 h-4" /> ???�비??추�?
+          <Plus className="w-4 h-4" /> 새 서비스 추가
         </button>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
         <div className="p-6 border-b border-gray-200 bg-gray-50">
           <p className="text-sm text-gray-600">
-            ?�사?�트???�시???�비????��??관리합?�다.
+            웹사이트에 표시될 서비스 항목을 관리합니다.
           </p>
         </div>
 
         <div className="divide-y divide-gray-200">
           {services.length === 0 ? (
             <div className="p-12 text-center text-gray-500">
-              추�????�비?��? ?�습?�다.
+              추가된 서비스가 없습니다.
             </div>
           ) : (
             services.map((service) => (
@@ -134,7 +134,7 @@ export function ServiceManager() {
                   <h3 className="text-lg font-bold text-gray-900 mb-1">{service.title}</h3>
                   <p className="text-sm text-gray-500 line-clamp-2">{service.description}</p>
                   <div className="mt-2 flex gap-4 text-sm font-medium">
-                    <span className="text-blue-600 hover:underline cursor-pointer" onClick={() => handleOpenModal(service)}>?�세 관�?/span>
+                    <span className="text-blue-600 hover:underline cursor-pointer" onClick={() => handleOpenModal(service)}>상세 관리</span>
                   </div>
                 </div>
 
@@ -155,10 +155,10 @@ export function ServiceManager() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold mb-4">{editingService ? '?�비???�정' : '???�비??추�?'}</h2>
+            <h2 className="text-xl font-bold mb-4">{editingService ? '서비스 수정' : '새 서비스 추가'}</h2>
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">?�비???�목</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">서비스 제목</label>
                 <input 
                   type="text" 
                   value={formData.title}
@@ -167,7 +167,7 @@ export function ServiceManager() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">?�명</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">설명</label>
                 <textarea 
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
@@ -175,7 +175,7 @@ export function ServiceManager() {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">?��??�화 ?�나리오 (?�세?�이지 ?��?지)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">디지털화 시나리오 (상세페이지 이미지)</label>
                 <div className="flex items-center gap-4">
                   {formData.scenario && (
                     <img src={formData.scenario} alt="Scenario Preview" className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
@@ -209,7 +209,7 @@ export function ServiceManager() {
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">?�비???��?지</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">서비스 이미지</label>
                 <div className="flex items-center gap-4">
                   {formData.image_url && (
                     <img src={formData.image_url} alt="Preview" className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
@@ -233,7 +233,7 @@ export function ServiceManager() {
                               setFormData({ ...formData, image_url: data.imageUrl });
                             }
                           } catch (err) {
-                            alert('?��?지 ?�로?�에 ?�패?�습?�다.');
+                            alert('이미지 업로드에 실패했습니다.');
                           }
                         }
                       }}
@@ -254,7 +254,7 @@ export function ServiceManager() {
                 onClick={handleSave}
                 className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
               >
-                ?�??
+                저장
               </button>
             </div>
           </div>

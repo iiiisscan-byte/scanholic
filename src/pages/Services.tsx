@@ -47,7 +47,7 @@ export function Services() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
-        <h1 className="text-4xl md:text-5xl font-bold mb-16">?��??�화 ?�비??/h1>
+        <h1 className="text-4xl md:text-5xl font-bold mb-16">디지털화 서비스</h1>
         
         <div className="space-y-32">
           {services.map((service, index) => {
@@ -71,7 +71,7 @@ export function Services() {
                         onClick={() => setSelectedScenarioImage(service.scenario)}
                         className="px-6 py-3 border-2 border-black text-black font-semibold rounded-full hover:bg-black hover:text-white transition-colors flex items-center justify-center gap-2"
                       >
-                        ?��??�화 ?�나리오 보기 <LucideIcons.Search className="w-4 h-4" />
+                        디지털화 시나리오 보기 <LucideIcons.Search className="w-4 h-4" />
                       </button>
                     )}
                   </div>
@@ -114,7 +114,7 @@ export function Services() {
                 exit={{ scale: 0.95, opacity: 0 }}
                 transition={{ duration: 0.2 }}
                 src={selectedScenarioImage}
-                alt="?��??�화 ?�나리오 ?�세?�이지"
+                alt="디지털화 시나리오 상세페이지"
                 className="w-full max-w-5xl h-auto rounded-xl shadow-2xl relative z-50"
                 onClick={(e) => e.stopPropagation()}
               />
