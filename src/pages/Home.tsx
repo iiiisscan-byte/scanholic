@@ -7,9 +7,9 @@ import { Link } from 'react-router-dom';
 const heroSlides = [
   {
     id: 1,
-    image: '/images/hero-scanner.png',
-    title: '압도적인 속도와 정밀함, 대량 스캔의 완성',
-    subtitle: '최첨단 고속 스캐너와 전문 공정으로 완벽한 디지털 환경을 구축합니다.'
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80',
+    title: '오래되고 찾기 어려운 대량의 보관문서',
+    subtitle: '디지털화를 통해 기업 경쟁력을 제고 하십시오 !'
   },
   {
     id: 2,
