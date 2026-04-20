@@ -7,7 +7,7 @@ export function Tech() {
   const location = useLocation();
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/contents')
+    fetch('/api/contents')
       .then(res => res.json())
       .then(data => setContents(data))
       .catch(err => console.error(err));
@@ -39,7 +39,7 @@ export function Tech() {
           <section id="image-processing" className="scroll-mt-32">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-6">{contents.tech_image_processing_title || '고도화된 이미지 처리'}</h2>
+                <h2 className="text-3xl font-bold mb-6">{contents.tech_image_processing_title || '고도?�된 ?��?지 처리'}</h2>
                 {contents.tech_image_processing_desc ? (
                   <div 
                     className="text-lg text-gray-600 leading-relaxed mb-6"
@@ -48,16 +48,16 @@ export function Tech() {
                 ) : (
                   <>
                     <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                      스캔홀릭의 독자적인 이미지 보정 기술은 훼손되거나 변색된 원본의 상태를 분석하여 최적의 상태로 복원합니다.
+                      ?�캔?��?�� ?�자?�인 ?��?지 보정 기술?� ?�손?�거??변?�된 ?�본???�태�?분석?�여 최적???�태�?복원?�니??
                     </p>
                     <ul className="space-y-4 text-gray-700">
                       <li className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0 mt-1">1</span>
-                        <span><strong>노이즈 제거 및 선명도 향상:</strong> 오래된 문서의 미세한 노이즈를 제거하고 윤곽선을 뚜렷하게 보정합니다.</span>
+                        <span><strong>?�이�??�거 �??�명???�상:</strong> ?�래??문서??미세???�이즈�? ?�거?�고 ?�곽?�을 ?�렷?�게 보정?�니??</span>
                       </li>
                       <li className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0 mt-1">2</span>
-                        <span><strong>색상 복원:</strong> 빛바랜 사진이나 문서의 원래 색상을 자연스럽게 복원합니다.</span>
+                        <span><strong>?�상 복원:</strong> 빛바???�진?�나 문서???�래 ?�상???�연?�럽�?복원?�니??</span>
                       </li>
                     </ul>
                   </>
@@ -75,7 +75,7 @@ export function Tech() {
                 <img src="https://images.unsplash.com/photo-1555421689-491a97ff2040?auto=format&fit=crop&q=80" alt="OCR Technology" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               </div>
               <div className="order-1 lg:order-2">
-                <h2 className="text-3xl font-bold mb-6">{contents.tech_ocr_title || 'OCR (광학 문자 인식)'}</h2>
+                <h2 className="text-3xl font-bold mb-6">{contents.tech_ocr_title || 'OCR (광학 문자 ?�식)'}</h2>
                 {contents.tech_ocr_desc ? (
                   <div 
                     className="text-lg text-gray-600 leading-relaxed mb-6"
@@ -84,16 +84,16 @@ export function Tech() {
                 ) : (
                   <>
                     <p className="text-lg text-gray-600 leading-relaxed mb-6">
-                      단순한 이미지 파일이 아닌, 검색과 편집이 가능한 살아있는 데이터로 변환합니다.
+                      ?�순???��?지 ?�일???�닌, 검?�과 ?�집??가?�한 ?�아?�는 ?�이?�로 변?�합?�다.
                     </p>
                     <ul className="space-y-4 text-gray-700">
                       <li className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0 mt-1">1</span>
-                        <span><strong>다국어 인식:</strong> 한국어, 영어, 한자 등 복잡한 다국어 문서도 높은 정확도로 인식합니다.</span>
+                        <span><strong>?�국???�식:</strong> ?�국?? ?�어, ?�자 ??복잡???�국??문서???��? ?�확?�로 ?�식?�니??</span>
                       </li>
                       <li className="flex items-start gap-3">
                         <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center text-sm flex-shrink-0 mt-1">2</span>
-                        <span><strong>구조화 데이터 변환:</strong> 표, 그래프, 단락 구조를 유지하며 엑셀, 워드 등 편집 가능한 포맷으로 제공합니다.</span>
+                        <span><strong>구조???�이??변??</strong> ?? 그래?? ?�락 구조�??��??�며 ?��?, ?�드 ???�집 가?�한 ?�맷?�로 ?�공?�니??</span>
                       </li>
                     </ul>
                   </>

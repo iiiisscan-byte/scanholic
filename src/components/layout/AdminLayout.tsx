@@ -17,11 +17,11 @@ export function AdminLayout() {
   };
 
   const navItems = [
-    { name: '대시보드', path: '/admin', icon: LayoutDashboard },
-    { name: '콘텐츠 관리', path: '/admin/content', icon: FileText },
-    { name: '서비스 관리', path: '/admin/services', icon: Layers },
-    { name: '상담문의 관리', path: '/admin/inquiries', icon: MessageSquare },
-    { name: '디자인 설정', path: '/admin/settings', icon: Settings },
+    { name: '?�?�보??, path: '/admin', icon: LayoutDashboard },
+    { name: '콘텐�?관�?, path: '/admin/content', icon: FileText },
+    { name: '?�비??관�?, path: '/admin/services', icon: Layers },
+    { name: '?�담문의 관�?, path: '/admin/inquiries', icon: MessageSquare },
+    { name: '?�자???�정', path: '/admin/settings', icon: Settings },
   ];
 
   return (
@@ -65,7 +65,7 @@ export function AdminLayout() {
             className="flex items-center gap-3 px-3 py-2 w-full text-left rounded-md text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
           >
             <LogOut className="w-5 h-5" />
-            로그아웃
+            로그?�웃
           </button>
         </div>
       </aside>
@@ -74,10 +74,10 @@ export function AdminLayout() {
       <main className="flex-1 flex flex-col overflow-hidden">
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
           <h1 className="text-xl font-semibold text-gray-800">
-            {navItems.find(item => item.path === location.pathname)?.name || '관리자 페이지'}
+            {navItems.find(item => item.path === location.pathname)?.name || '관리자 ?�이지'}
           </h1>
           <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500">관리자님 환영합니다.</span>
+            <span className="text-sm text-gray-500">관리자???�영?�니??</span>
             <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-medium text-gray-600">
               A
             </div>

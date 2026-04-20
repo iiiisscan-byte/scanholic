@@ -8,12 +8,12 @@ export function Dashboard() {
   const [services, setServices] = useState<any[]>([]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/admin/inquiries')
+    fetch('/api/admin/inquiries')
       .then(res => res.json())
       .then(data => setInquiries(data))
       .catch(err => console.error(err));
 
-    fetch('http://localhost:8000/api/services')
+    fetch('/api/services')
       .then(res => res.json())
       .then(data => setServices(data))
       .catch(err => console.error(err));
@@ -24,10 +24,10 @@ export function Dashboard() {
   const recentInquiries = inquiries.slice(0, 3);
 
   const stats = [
-    { title: '오늘의 방문자', value: '1,234', icon: Users, change: '+12%' },
-    { title: '대기중인 문의', value: pendingCount.toString(), icon: MessageSquare, change: pendingCount > 0 ? `+${pendingCount}` : '0' },
-    { title: '운영중인 서비스', value: services.length.toString(), icon: FileText, change: '0%' },
-    { title: '처리 완료된 문의', value: completedCount.toString(), icon: CheckCircle, change: completedCount > 0 ? `+${completedCount}` : '0' },
+    { title: '?�늘??방문??, value: '1,234', icon: Users, change: '+12%' },
+    { title: '?�기중??문의', value: pendingCount.toString(), icon: MessageSquare, change: pendingCount > 0 ? `+${pendingCount}` : '0' },
+    { title: '?�영중인 ?�비??, value: services.length.toString(), icon: FileText, change: '0%' },
+    { title: '처리 ?�료??문의', value: completedCount.toString(), icon: CheckCircle, change: completedCount > 0 ? `+${completedCount}` : '0' },
   ];
 
   return (
@@ -55,24 +55,24 @@ export function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold mb-4">최근 문의 내역</h2>
+          <h2 className="text-lg font-bold mb-4">최근 문의 ?�역</h2>
           <div className="space-y-4">
             {recentInquiries.length === 0 ? (
-              <div className="text-sm text-gray-500 py-4 text-center">최근 접수된 문의가 없습니다.</div>
+              <div className="text-sm text-gray-500 py-4 text-center">최근 ?�수??문의가 ?�습?�다.</div>
             ) : (
               recentInquiries.map((inquiry) => (
                 <div key={inquiry.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => navigate('/admin/inquiries')}>
                   <div>
-                    <p className="font-medium text-gray-900 line-clamp-1">{inquiry.message || '내용 없음'}</p>
+                    <p className="font-medium text-gray-900 line-clamp-1">{inquiry.message || '?�용 ?�음'}</p>
                     <p className="text-sm text-gray-500">{inquiry.name} {inquiry.company ? `(${inquiry.company})` : ''}</p>
                   </div>
                   {inquiry.status === 'pending' ? (
                     <span className="px-3 py-1 flex items-center gap-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full whitespace-nowrap">
-                      <Clock className="w-3 h-3" /> 대기중
+                      <Clock className="w-3 h-3" /> ?�기중
                     </span>
                   ) : (
                     <span className="px-3 py-1 flex items-center gap-1 bg-green-100 text-green-800 text-xs font-medium rounded-full whitespace-nowrap">
-                      <CheckCircle className="w-3 h-3" /> 완료
+                      <CheckCircle className="w-3 h-3" /> ?�료
                     </span>
                   )}
                 </div>
@@ -82,15 +82,15 @@ export function Dashboard() {
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-          <h2 className="text-lg font-bold mb-4">빠른 작업</h2>
+          <h2 className="text-lg font-bold mb-4">빠른 ?�업</h2>
           <div className="grid grid-cols-1 gap-4">
             <button 
               onClick={() => navigate('/admin/services')}
               className="p-4 border border-gray-200 rounded-lg text-left hover:bg-gray-50 transition-colors"
             >
               <FileText className="w-6 h-6 text-black mb-2" />
-              <span className="block font-medium text-gray-900">디지털화 시나리오 추가</span>
-              <span className="text-xs text-gray-500">서비스/작업물을 관리하세요.</span>
+              <span className="block font-medium text-gray-900">?��??�화 ?�나리오 추�?</span>
+              <span className="text-xs text-gray-500">?�비???�업물을 관리하?�요.</span>
             </button>
           </div>
         </div>

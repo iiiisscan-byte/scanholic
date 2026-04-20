@@ -14,7 +14,7 @@ export function ContentManager() {
   });
 
   useEffect(() => {
-    fetch('http://localhost:8000/api/contents')
+    fetch('/api/contents')
       .then(res => res.json())
       .then(data => {
         setContents(prev => ({ ...prev, ...data }));
@@ -29,17 +29,17 @@ export function ContentManager() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:8000/api/contents', {
+      const response = await fetch('/api/contents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contents),
       });
       if (response.ok) {
-        alert('콘텐츠가 성공적으로 저장되었습니다!');
+        alert('콘텐츠�? ?�공?�으�??�?�되?�습?�다!');
       }
     } catch (error) {
       console.error('Failed to save contents:', error);
-      alert('저장 중 오류가 발생했습니다.');
+      alert('?�??�??�류가 발생?�습?�다.');
     } finally {
       setSaving(false);
     }
@@ -60,14 +60,14 @@ export function ContentManager() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">콘텐츠 관리</h1>
+        <h1 className="text-2xl font-bold text-gray-900">콘텐�?관�?/h1>
         <button 
           onClick={handleSave}
           disabled={saving}
           className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
         >
           {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-          저장하기
+          ?�?�하�?
         </button>
       </div>
 
@@ -79,7 +79,7 @@ export function ContentManager() {
               activeTab === 'about' ? 'text-black border-b-2 border-black' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            회사소개 페이지
+            ?�사?�개 ?�이지
           </button>
           <button
             onClick={() => setActiveTab('tech')}
@@ -87,7 +87,7 @@ export function ContentManager() {
               activeTab === 'tech' ? 'text-black border-b-2 border-black' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
-            기술 소개
+            기술 ?�개
           </button>
         </div>
 
@@ -95,7 +95,7 @@ export function ContentManager() {
           {activeTab === 'about' && (
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">소개글 (HTML 지원)</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">?�개글 (HTML 지??</label>
                 <textarea 
                   rows={10} 
                   value={contents.about_text} 
@@ -108,22 +108,22 @@ export function ContentManager() {
 
           {activeTab === 'tech' && (
             <div className="space-y-8">
-              <p className="text-gray-500 text-sm">기술 소개 페이지(이미지 처리, OCR)의 상세 내용을 관리합니다.</p>
+              <p className="text-gray-500 text-sm">기술 ?�개 ?�이지(?��?지 처리, OCR)???�세 ?�용??관리합?�다.</p>
               
               <div className="space-y-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 border-b pb-2">이미지 처리 기술</h3>
+                <h3 className="text-lg font-bold text-gray-900 border-b pb-2">?��?지 처리 기술</h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">?�목</label>
                   <input 
                     type="text" 
                     value={contents.tech_image_processing_title || ''} 
                     onChange={(e) => updateContent('tech_image_processing_title', e.target.value)}
-                    placeholder="예: 고도화된 이미지 처리"
+                    placeholder="?? 고도?�된 ?��?지 처리"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">설명 내용 (HTML 지원)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">?�명 ?�용 (HTML 지??</label>
                   <textarea 
                     rows={4}
                     value={contents.tech_image_processing_desc || ''} 
@@ -134,19 +134,19 @@ export function ContentManager() {
               </div>
 
               <div className="space-y-6 bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <h3 className="text-lg font-bold text-gray-900 border-b pb-2">OCR (광학 문자 인식)</h3>
+                <h3 className="text-lg font-bold text-gray-900 border-b pb-2">OCR (광학 문자 ?�식)</h3>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">제목</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">?�목</label>
                   <input 
                     type="text" 
                     value={contents.tech_ocr_title || ''} 
                     onChange={(e) => updateContent('tech_ocr_title', e.target.value)}
-                    placeholder="예: OCR (광학 문자 인식)"
+                    placeholder="?? OCR (광학 문자 ?�식)"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-black outline-none" 
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">설명 내용 (HTML 지원)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">?�명 ?�용 (HTML 지??</label>
                   <textarea 
                     rows={4}
                     value={contents.tech_ocr_desc || ''} 

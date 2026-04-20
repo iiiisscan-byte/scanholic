@@ -42,7 +42,7 @@ export function Popup({ id, title, content }: PopupProps) {
             <button 
               onClick={() => handleClose(false)}
               className="hover:bg-red-700 p-1 rounded-full transition-colors"
-              aria-label="닫기"
+              aria-label="?�기"
             >
               <X className="w-5 h-5" />
             </button>
@@ -57,13 +57,13 @@ export function Popup({ id, title, content }: PopupProps) {
               onClick={() => handleClose(true)}
               className="text-sm text-gray-500 hover:text-gray-900 transition-colors"
             >
-              오늘 하루 보지 않기
+              ?�늘 ?�루 보�? ?�기
             </button>
             <button 
               onClick={() => handleClose(false)}
               className="bg-gray-900 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
             >
-              닫기
+              ?�기
             </button>
           </div>
         </motion.div>

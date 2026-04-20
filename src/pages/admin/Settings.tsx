@@ -10,16 +10,16 @@ export function Settings() {
     primaryColor: '#141414',
     backgroundColor: '#E6E6E6',
     fontFamily: 'Pretendard',
-    siteTitle: '스캔홀릭',
+    siteTitle: '?�캔?��?,
     notice_active: 'false',
-    notice_title: '긴급 공지사항',
+    notice_title: '긴급 공�??�항',
     notice_content: ''
   });
 
   const [contents, setContents] = useState<any>({});
 
   const [popups, setPopups] = useState<any[]>([]);
-  const [newPopup, setNewPopup] = useState({ title: '새 공지사항', content: '', is_active: 1 });
+  const [newPopup, setNewPopup] = useState({ title: '??공�??�항', content: '', is_active: 1 });
 
   const [accountData, setAccountData] = useState({
     newUsername: '',
@@ -27,9 +27,9 @@ export function Settings() {
     newPassword: ''
   });
 
-  // 설정 불러오기
+  // ?�정 불러?�기
   useEffect(() => {
-    fetch('http://localhost:8000/api/settings')
+    fetch('/api/settings')
       .then(res => res.json())
       .then(data => {
         setSettings(prev => ({ ...prev, ...data }));
@@ -40,12 +40,12 @@ export function Settings() {
         setLoading(false);
       });
 
-    fetch('http://localhost:8000/api/admin/popups')
+    fetch('/api/admin/popups')
       .then(res => res.json())
       .then(data => setPopups(data))
       .catch(err => console.error(err));
 
-    fetch('http://localhost:8000/api/contents')
+    fetch('/api/contents')
       .then(res => res.json())
       .then(data => setContents(data))
       .catch(err => console.error(err));
@@ -54,25 +54,25 @@ export function Settings() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // 디자인 설정 저장
-      await fetch('http://localhost:8000/api/settings', {
+      // ?�자???�정 ?�??
+      await fetch('/api/settings', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings),
       });
 
-      // 배너 및 텍스트 콘텐츠 저장
-      await fetch('http://localhost:8000/api/contents', {
+      // 배너 �??�스??콘텐�??�??
+      await fetch('/api/contents', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(contents),
       });
 
-      alert('설정이 성공적으로 저장되었습니다!');
+      alert('?�정???�공?�으�??�?�되?�습?�다!');
       window.location.reload();
     } catch (error) {
       console.error('Failed to save settings:', error);
-      alert('저장 중 네트워크 오류가 발생했습니다.');
+      alert('?�??�??�트?�크 ?�류가 발생?�습?�다.');
     } finally {
       setSaving(false);
     }
@@ -80,13 +80,13 @@ export function Settings() {
 
   const handleUpdateAccount = async () => {
     if (!accountData.newUsername || !accountData.currentPassword || !accountData.newPassword) {
-      alert('모든 필드를 입력해주세요.');
+      alert('모든 ?�드�??�력?�주?�요.');
       return;
     }
     
     setSaving(true);
     try {
-      const response = await fetch('http://localhost:8000/api/admin/credentials', {
+      const response = await fetch('/api/admin/credentials', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -98,15 +98,15 @@ export function Settings() {
       
       const data = await response.json();
       if (response.ok) {
-        alert('관리자 계정 정보가 성공적으로 변경되었습니다. 다시 로그인 해 주세요.');
+        alert('관리자 계정 ?�보가 ?�공?�으�?변경되?�습?�다. ?�시 로그????주세??');
         sessionStorage.removeItem('admin_token');
         window.location.reload();
       } else {
-        alert(data.detail || '변경 중 오류가 발생했습니다.');
+        alert(data.detail || '변�?�??�류가 발생?�습?�다.');
       }
     } catch (error) {
       console.error('Failed to update credentials:', error);
-      alert('네트워크 오류가 발생했습니다.');
+      alert('?�트?�크 ?�류가 발생?�습?�다.');
     } finally {
       setSaving(false);
     }
@@ -120,7 +120,7 @@ export function Settings() {
     formData.append('file', file);
 
     try {
-      const response = await fetch('http://localhost:8000/api/upload', {
+      const response = await fetch('/api/upload', {
         method: 'POST',
         body: formData,
       });
@@ -129,11 +129,11 @@ export function Settings() {
         const data = await response.json();
         setContents({ ...contents, [`hero_slide_${num}_image`]: data.imageUrl });
       } else {
-        alert('이미지 업로드에 실패했습니다.');
+        alert('?��?지 ?�로?�에 ?�패?�습?�다.');
       }
     } catch (error) {
       console.error('Image upload error:', error);
-      alert('이미지 업로드 중 오류가 발생했습니다.');
+      alert('?��?지 ?�로??�??�류가 발생?�습?�다.');
     }
   };
 
@@ -143,16 +143,16 @@ export function Settings() {
 
   const handleAddPopup = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/admin/popups', {
+      const response = await fetch('/api/admin/popups', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newPopup),
       });
       if (response.ok) {
-        const res = await fetch('http://localhost:8000/api/admin/popups');
+        const res = await fetch('/api/admin/popups');
         const data = await res.json();
         setPopups(data);
-        setNewPopup({ title: '새 공지사항', content: '', is_active: 1 });
+        setNewPopup({ title: '??공�??�항', content: '', is_active: 1 });
       }
     } catch (error) {
       console.error(error);
@@ -161,7 +161,7 @@ export function Settings() {
 
   const handleUpdatePopup = async (id: number, updated: any) => {
     try {
-      await fetch(`http://localhost:8000/api/admin/popups/${id}`, {
+      await fetch(`/api/admin/popups/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updated),
@@ -173,20 +173,20 @@ export function Settings() {
   };
 
   const handleDeletePopup = async (id: number) => {
-    if (!confirm('정말 삭제하시겠습니까?')) return;
+    if (!confirm('?�말 ??��?�시겠습?�까?')) return;
     try {
-      await fetch(`http://localhost:8000/api/admin/popups/${id}`, { method: 'DELETE' });
+      await fetch(`/api/admin/popups/${id}`, { method: 'DELETE' });
       setPopups(popups.filter(p => p.id !== id));
     } catch (error) {
       console.error(error);
     }
   };
 
-  // 팝업 개별 편집 컴포넌트 (한글 입력 문제 해결을 위해 분리)
+  // ?�업 개별 ?�집 컴포?�트 (?��? ?�력 문제 ?�결???�해 분리)
   const PopupItemEditor = ({ popup }: { popup: any }) => {
     const [localPopup, setLocalPopup] = useState(popup);
 
-    // 부모 상태가 바뀌면(다른 곳에서 업데이트되면) 로컬 상태 동기화
+    // 부�??�태가 바뀌면(?�른 곳에???�데?�트?�면) 로컬 ?�태 ?�기??
     useEffect(() => {
       setLocalPopup(popup);
     }, [popup.id, popup.is_active]);
@@ -208,7 +208,7 @@ export function Settings() {
                 onChange={(e) => setLocalPopup({ ...localPopup, title: e.target.value })}
                 onBlur={handleBlur}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm font-bold bg-white outline-none focus:ring-2 focus:ring-black"
-                placeholder="팝업 제목"
+                placeholder="?�업 ?�목"
               />
               <label className="relative inline-flex items-center cursor-pointer">
                 <input 
@@ -223,7 +223,7 @@ export function Settings() {
                   }}
                 />
                 <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-black"></div>
-                <span className="ml-2 text-xs font-medium text-gray-500">{localPopup.is_active === 1 ? '활성' : '비활성'}</span>
+                <span className="ml-2 text-xs font-medium text-gray-500">{localPopup.is_active === 1 ? '?�성' : '비활??}</span>
               </label>
             </div>
             <textarea 
@@ -232,7 +232,7 @@ export function Settings() {
               onChange={(e) => setLocalPopup({ ...localPopup, content: e.target.value })}
               onBlur={handleBlur}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm bg-white outline-none focus:ring-2 focus:ring-black resize-none"
-              placeholder="팝업 상세 내용"
+              placeholder="?�업 ?�세 ?�용"
             ></textarea>
           </div>
           <button 
@@ -257,7 +257,7 @@ export function Settings() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900">환경 설정</h1>
+        <h1 className="text-2xl font-bold text-gray-900">?�경 ?�정</h1>
         {activeTab !== 'account' && (
           <button 
             onClick={handleSave}
@@ -265,7 +265,7 @@ export function Settings() {
             className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
           >
             {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} 
-            변경사항 저장
+            변경사???�??
           </button>
         )}
       </div>
@@ -278,7 +278,7 @@ export function Settings() {
               activeTab === 'theme' ? 'bg-white border-l-4 border-black text-black' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <Palette className="w-5 h-5" /> 색상 테마
+            <Palette className="w-5 h-5" /> ?�상 ?�마
           </button>
           <button
             onClick={() => setActiveTab('typography')}
@@ -286,7 +286,7 @@ export function Settings() {
               activeTab === 'typography' ? 'bg-white border-l-4 border-black text-black' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <Type className="w-5 h-5" /> 타이포그래피
+            <Type className="w-5 h-5" /> ?�?�포그래??
           </button>
           <button
             onClick={() => setActiveTab('banner')}
@@ -294,7 +294,7 @@ export function Settings() {
               activeTab === 'banner' ? 'bg-white border-l-4 border-black text-black' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <LayoutTemplate className="w-5 h-5" /> 메인 배너 관리
+            <LayoutTemplate className="w-5 h-5" /> 메인 배너 관�?
           </button>
           <button
             onClick={() => setActiveTab('notice')}
@@ -302,7 +302,7 @@ export function Settings() {
               activeTab === 'notice' ? 'bg-white border-l-4 border-black text-black' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <Bell className="w-5 h-5" /> 팝업 공지사항 관리
+            <Bell className="w-5 h-5" /> ?�업 공�??�항 관�?
           </button>
           <button
             onClick={() => setActiveTab('account')}
@@ -310,7 +310,7 @@ export function Settings() {
               activeTab === 'account' ? 'bg-white border-l-4 border-black text-black' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            <User className="w-5 h-5" /> 관리자 계정 변경
+            <User className="w-5 h-5" /> 관리자 계정 변�?
           </button>
         </div>
 
@@ -318,14 +318,14 @@ export function Settings() {
           {activeTab === 'theme' && (
             <div className="space-y-8 max-w-2xl">
               <div>
-                <h2 className="text-lg font-bold mb-2">브랜드 컬러 설정</h2>
-                <p className="text-sm text-gray-500 mb-6">웹사이트 전반에 적용되는 주요 색상을 변경합니다.</p>
+                <h2 className="text-lg font-bold mb-2">브랜??컬러 ?�정</h2>
+                <p className="text-sm text-gray-500 mb-6">?�사?�트 ?�반???�용?�는 주요 ?�상??변경합?�다.</p>
                 
                 <div className="space-y-6">
                   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <div>
-                      <h3 className="font-medium text-gray-900">포인트 색상 (Primary)</h3>
-                      <p className="text-sm text-gray-500">버튼, 강조 텍스트, 헤더 로고 등에 사용됩니다.</p>
+                      <h3 className="font-medium text-gray-900">?�인???�상 (Primary)</h3>
+                      <p className="text-sm text-gray-500">버튼, 강조 ?�스?? ?�더 로고 ?�에 ?�용?�니??</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <input 
@@ -340,8 +340,8 @@ export function Settings() {
 
                   <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
                     <div>
-                      <h3 className="font-medium text-gray-900">배경 색상 (Background)</h3>
-                      <p className="text-sm text-gray-500">웹사이트의 기본 배경색입니다.</p>
+                      <h3 className="font-medium text-gray-900">배경 ?�상 (Background)</h3>
+                      <p className="text-sm text-gray-500">?�사?�트??기본 배경?�입?�다.</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <input 
@@ -361,9 +361,9 @@ export function Settings() {
                 <div className="p-6 rounded-xl border border-gray-300" style={{ backgroundColor: settings.backgroundColor }}>
                   <div className="bg-white p-6 rounded-lg shadow-sm">
                     <h3 className="text-2xl font-bold mb-2" style={{ color: settings.primaryColor }}>{settings.siteTitle}</h3>
-                    <p className="text-gray-600 mb-4">전문 스캐너를 활용한 디지털화 서비스</p>
+                    <p className="text-gray-600 mb-4">?�문 ?�캐?��? ?�용???��??�화 ?�비??/p>
                     <button className="text-white px-4 py-2 rounded-md font-medium" style={{ backgroundColor: settings.primaryColor }}>
-                      상담문의
+                      ?�담문의
                     </button>
                   </div>
                 </div>
@@ -374,14 +374,14 @@ export function Settings() {
           {activeTab === 'typography' && (
             <div className="space-y-8 max-w-2xl">
               <div>
-                <h2 className="text-lg font-bold mb-2">폰트 설정</h2>
-                <p className="text-sm text-gray-500 mb-6">웹사이트의 기본 글꼴을 선택합니다.</p>
+                <h2 className="text-lg font-bold mb-2">?�트 ?�정</h2>
+                <p className="text-sm text-gray-500 mb-6">?�사?�트??기본 글꼴을 ?�택?�니??</p>
                 
                 <div className="space-y-4">
                   <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                     <div>
                       <h3 className="font-medium text-gray-900 font-sans">Pretendard</h3>
-                      <p className="text-sm text-gray-500">가장 널리 쓰이는 깔끔한 고딕 폰트</p>
+                      <p className="text-sm text-gray-500">가???�리 ?�이??깔끔??고딕 ?�트</p>
                     </div>
                     <input 
                       type="radio" 
@@ -395,7 +395,7 @@ export function Settings() {
                   <label className="flex items-center justify-between p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">
                     <div>
                       <h3 className="font-medium text-gray-900 font-serif">Noto Serif KR</h3>
-                      <p className="text-sm text-gray-500">고급스럽고 전통적인 느낌의 명조 폰트</p>
+                      <p className="text-sm text-gray-500">고급?�럽�??�통?�인 ?�낌??명조 ?�트</p>
                     </div>
                     <input 
                       type="radio" 
@@ -414,21 +414,21 @@ export function Settings() {
             <div className="space-y-8 max-w-3xl">
               <div className="flex justify-between items-center">
                 <div>
-                  <h2 className="text-lg font-bold">팝업 공지사항 관리</h2>
-                  <p className="text-sm text-gray-500">웹사이트 접속 시 보여줄 여러 개의 팝업을 관리합니다.</p>
+                  <h2 className="text-lg font-bold">?�업 공�??�항 관�?/h2>
+                  <p className="text-sm text-gray-500">?�사?�트 ?�속 ??보여�??�러 개의 ?�업??관리합?�다.</p>
                 </div>
                 <button 
                   onClick={handleAddPopup}
                   className="flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg text-sm"
                 >
-                  <Plus className="w-4 h-4" /> 팝업 추가
+                  <Plus className="w-4 h-4" /> ?�업 추�?
                 </button>
               </div>
 
               <div className="space-y-6">
                 {popups.length === 0 ? (
                   <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-xl text-gray-400">
-                    등록된 팝업이 없습니다. '팝업 추가'를 눌러 새 공지사항을 만드세요.
+                    ?�록???�업???�습?�다. '?�업 추�?'�??�러 ??공�??�항??만드?�요.
                   </div>
                 ) : (
                   popups.map((popup) => (
@@ -442,21 +442,21 @@ export function Settings() {
           {activeTab === 'banner' && (
             <div className="space-y-8 max-w-4xl">
               <div>
-                <h2 className="text-lg font-bold mb-2">메인 배너(슬라이드) 관리</h2>
-                <p className="text-sm text-gray-500 mb-6">홈페이지 메인화면의 5개 배너 이미지와 문구를 편집합니다.</p>
+                <h2 className="text-lg font-bold mb-2">메인 배너(?�라?�드) 관�?/h2>
+                <p className="text-sm text-gray-500 mb-6">?�페?��? 메인?�면??5�?배너 ?��?지?� 문구�??�집?�니??</p>
                 
                 <div className="space-y-12">
                   {[1, 2, 3, 4, 5].map((num) => (
                     <div key={num} className="p-6 border border-gray-200 rounded-xl bg-gray-50/30 space-y-4">
                       <div className="flex items-center gap-2 mb-2">
                         <span className="w-8 h-8 bg-black text-white rounded-full flex items-center justify-center text-sm font-bold">{num}</span>
-                        <h3 className="font-bold text-gray-900">배너 슬라이드 {num}</h3>
+                        <h3 className="font-bold text-gray-900">배너 ?�라?�드 {num}</h3>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-4">
                           <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">메인 타이틀</label>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">메인 ?�?��?</label>
                             <input 
                               type="text" 
                               value={contents[`hero_slide_${num}_title`] || ''}
@@ -465,7 +465,7 @@ export function Settings() {
                             />
                           </div>
                           <div>
-                            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">서브 타이틀</label>
+                            <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">?�브 ?�?��?</label>
                             <textarea 
                               rows={2}
                               value={contents[`hero_slide_${num}_subtitle`] || ''}
@@ -476,7 +476,7 @@ export function Settings() {
                         </div>
                         
                         <div>
-                          <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">배너 이미지 (파일 업로드 또는 URL)</label>
+                          <label className="block text-xs font-semibold text-gray-500 uppercase mb-1">배너 ?��?지 (?�일 ?�로???�는 URL)</label>
                           <div className="flex gap-2 mb-2">
                             <input 
                               type="text" 
@@ -487,7 +487,7 @@ export function Settings() {
                             />
                             <label className="flex items-center gap-1 bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg cursor-pointer transition-colors border border-gray-300">
                               <Upload className="w-4 h-4 text-gray-600" />
-                              <span className="text-xs font-medium text-gray-600">업로드</span>
+                              <span className="text-xs font-medium text-gray-600">?�로??/span>
                               <input 
                                 type="file" 
                                 accept="image/*" 
@@ -500,7 +500,7 @@ export function Settings() {
                             {contents[`hero_slide_${num}_image`] ? (
                               <img src={contents[`hero_slide_${num}_image`]} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="Preview" />
                             ) : (
-                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">이미지 없음</div>
+                              <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">?��?지 ?�음</div>
                             )}
                           </div>
                         </div>
@@ -515,36 +515,36 @@ export function Settings() {
           {activeTab === 'account' && (
             <div className="space-y-8 max-w-2xl">
               <div>
-                <h2 className="text-lg font-bold mb-2">계정 및 보안 설정</h2>
-                <p className="text-sm text-gray-500 mb-6">최고 관리자의 접속 아이디와 비밀번호를 변경합니다.</p>
+                <h2 className="text-lg font-bold mb-2">계정 �?보안 ?�정</h2>
+                <p className="text-sm text-gray-500 mb-6">최고 관리자???�속 ?�이?��? 비�?번호�?변경합?�다.</p>
                 
                 <div className="space-y-4 p-6 border border-gray-200 rounded-xl bg-gray-50">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">새 아이디</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">???�이??/label>
                     <input 
                       type="text" 
-                      placeholder="변경할 아이디를 입력하세요"
+                      placeholder="변경할 ?�이?��? ?�력?�세??
                       value={accountData.newUsername}
                       onChange={(e) => setAccountData({ ...accountData, newUsername: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-black bg-white" 
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">새 비밀번호</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">??비�?번호</label>
                     <input 
                       type="password" 
-                      placeholder="변경할 비밀번호를 입력하세요"
+                      placeholder="변경할 비�?번호�??�력?�세??
                       value={accountData.newPassword}
                       onChange={(e) => setAccountData({ ...accountData, newPassword: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-black bg-white" 
                     />
                   </div>
                   <div className="pt-4 border-t border-gray-200 mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">현재 비밀번호 <span className="text-red-500">*</span></label>
-                    <p className="text-xs text-gray-500 mb-2">정보를 변경하려면 현재 비밀번호를 인증해야 합니다.</p>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">?�재 비�?번호 <span className="text-red-500">*</span></label>
+                    <p className="text-xs text-gray-500 mb-2">?�보�?변경하?�면 ?�재 비�?번호�??�증?�야 ?�니??</p>
                     <input 
                       type="password" 
-                      placeholder="현재 사용중인 비밀번호 입력"
+                      placeholder="?�재 ?�용중인 비�?번호 ?�력"
                       value={accountData.currentPassword}
                       onChange={(e) => setAccountData({ ...accountData, currentPassword: e.target.value })}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-black bg-white" 
@@ -558,7 +558,7 @@ export function Settings() {
                       className="flex items-center gap-2 bg-black text-white px-6 py-2 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50"
                     >
                       {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />} 
-                      계정 정보 저장
+                      계정 ?�보 ?�??
                     </button>
                   </div>
                 </div>

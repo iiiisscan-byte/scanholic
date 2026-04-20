@@ -21,7 +21,7 @@ export function Header() {
     };
     window.addEventListener('scroll', handleScroll);
 
-    fetch('http://localhost:8000/api/services')
+    fetch('/api/services')
       .then(res => res.json())
       .then(data => setDbServices(data))
       .catch(err => console.error('Failed to fetch services for nav:', err));
@@ -35,25 +35,25 @@ export function Header() {
   }, [location.pathname]);
 
   const navLinks = [
-    { name: '회사소개', path: '/about' },
+    { name: '?�사?�개', path: '/about' },
     { 
       name: '기술', 
       path: '/tech',
       dropdown: [
-        { name: '이미지 처리', path: '/tech#image-processing' },
+        { name: '?��?지 처리', path: '/tech#image-processing' },
         { name: 'OCR', path: '/tech#ocr' }
       ]
     },
     { 
-      name: '디지털화 서비스', 
+      name: '?��??�화 ?�비??, 
       path: '/services',
       dropdown: dbServices.map(service => ({
         name: service.title,
         path: `/services#service-${service.id}`
       }))
     },
-    { name: '상담문의', path: '/contact' },
-    { name: '오시는길', path: '/location' },
+    { name: '?�담문의', path: '/contact' },
+    { name: '?�시?�길', path: '/location' },
   ];
 
   return (
@@ -67,8 +67,8 @@ export function Header() {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
-            <img src="/logo.png" alt="스캔홀릭 로고" className="w-8 h-8 object-cover rounded-sm" />
-            <span className="text-2xl font-bold tracking-tighter">스캔 홀릭</span>
+            <img src="/logo.png" alt="?�캔?��?로고" className="w-8 h-8 object-cover rounded-sm" />
+            <span className="text-2xl font-bold tracking-tighter">?�캔 ?��?/span>
           </Link>
 
           {/* Desktop Nav */}
@@ -154,7 +154,7 @@ export function Header() {
               ))}
               <div className="pt-4 border-t border-gray-300">
                 <Link to="/admin" className="text-sm font-medium text-gray-500">
-                  관리자 페이지
+                  관리자 ?�이지
                 </Link>
               </div>
             </div>
