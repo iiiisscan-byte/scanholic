@@ -46,7 +46,6 @@ export function Home() {
   const [contents, setContents] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isPopupOpen, setIsPopupOpen] = useState(true);
 
   const dynamicSlides = contents ? [
     {
@@ -82,12 +81,6 @@ export function Home() {
   ] : heroSlides;
 
   useEffect(() => {
-    // 팝업 쿠키 확인 (오늘 하루 보지 않기 등은 생략하고 일단 표시)
-    const hasClosedPopup = localStorage.getItem('hidePopup');
-    if (hasClosedPopup) {
-      setIsPopupOpen(false);
-    }
-
     const timeoutPromise = new Promise((_, reject) =>
       setTimeout(() => reject(new Error('Request Timeout')), 10000)
     );
@@ -137,15 +130,6 @@ export function Home() {
     }
   };
 
-  const closePopup = () => {
-    setIsPopupOpen(false);
-  };
-
-  const closePopupToday = () => {
-    localStorage.setItem('hidePopup', 'true');
-    setIsPopupOpen(false);
-  };
-
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % dynamicSlides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + dynamicSlides.length) % dynamicSlides.length);
 
@@ -159,32 +143,6 @@ export function Home() {
 
   return (
     <div className="w-full">
-      {/* 5월 1일 공휴일 팝업 */}
-      <AnimatePresence>
-        {isPopupOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            className="fixed top-24 left-8 z-[100] w-72 bg-white rounded-xl shadow-2xl overflow-hidden border border-gray-200"
-          >
-            <div className="bg-red-600 text-white p-3 flex justify-between items-center">
-              <span className="font-bold">5월 1일 공휴일</span>
-              <button onClick={closePopup}><X className="w-4 h-4" /></button>
-            </div>
-            <div className="p-4 bg-white min-h-[100px]">
-              <p className="text-gray-800 text-sm leading-relaxed">
-                26년 5월 1일은 국가지정 공식 휴무일입니다. 감사합니다
-              </p>
-            </div>
-            <div className="p-3 bg-gray-50 border-t border-gray-100 flex justify-between items-center text-[11px] text-gray-500">
-              <button onClick={closePopupToday} className="hover:text-black">오늘 하루 보지 않기</button>
-              <button onClick={closePopup} className="bg-neutral-800 text-white px-4 py-1.5 rounded font-bold">닫기</button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
       {/* Hero Section */}
       <section className="relative h-[80vh] min-h-[600px] w-full overflow-hidden bg-black">
         <AnimatePresence mode="wait">
