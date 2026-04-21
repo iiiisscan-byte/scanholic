@@ -26,8 +26,15 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # 업로드 폴더 설정 (로컬 개발용)
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
-os.makedirs(UPLOAD_DIR, exist_ok=True)
+if os.environ.get("VERCEL"):
+    UPLOAD_DIR = "/tmp/uploads"
+else:
+    UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
+
+try:
+    os.makedirs(UPLOAD_DIR, exist_ok=True)
+except Exception as e:
+    print(f"Failed to create upload directory: {e}")
 
 # Gemini 설정
 if GEMINI_API_KEY:
