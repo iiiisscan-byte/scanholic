@@ -189,6 +189,9 @@ export function ServiceManager() {
                         if (file) {
                           const uploadData = new FormData();
                           uploadData.append('file', file);
+                          const target = e.target as HTMLInputElement;
+                          target.disabled = true;
+                          alert('업로드 중입니다... 잠시만 기다려주세요!');
                           try {
                             const response = await fetch('/api/upload', {
                               method: 'POST',
@@ -197,9 +200,16 @@ export function ServiceManager() {
                             if (response.ok) {
                               const result = await response.json();
                               setFormData({...formData, scenario: result.imageUrl});
+                              alert('시나리오 이미지 업로드 완료!');
+                            } else {
+                              alert('업로드 실패');
                             }
                           } catch (error) {
                             console.error('Upload failed:', error);
+                            alert('업로드 실패');
+                          } finally {
+                            target.disabled = false;
+                            target.value = '';
                           }
                         }
                       }}
@@ -223,6 +233,8 @@ export function ServiceManager() {
                         if (file) {
                           const uploadData = new FormData();
                           uploadData.append('file', file);
+                          const target = e.target as HTMLInputElement;
+                          target.disabled = true;
                           try {
                             const res = await fetch('/api/upload', {
                               method: 'POST',
@@ -234,6 +246,9 @@ export function ServiceManager() {
                             }
                           } catch (err) {
                             alert('이미지 업로드에 실패했습니다.');
+                          } finally {
+                            target.disabled = false;
+                            target.value = '';
                           }
                         }
                       }}
