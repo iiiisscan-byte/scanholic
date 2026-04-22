@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
 
@@ -7,6 +7,7 @@ export function Services() {
   const [services, setServices] = useState<any[]>([]);
   const [selectedScenarioImage, setSelectedScenarioImage] = useState<string | null>(null);
   const location = useLocation();
+  const lastPathname = useRef(location.pathname);
 
   useEffect(() => {
     fetch('/api/services')
@@ -16,16 +17,20 @@ export function Services() {
   }, []);
 
   useEffect(() => {
+    const isSamePage = lastPathname.current === location.pathname;
+
     if (location.hash && services.length > 0) {
       setTimeout(() => {
         const element = document.getElementById(location.hash.slice(1));
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
         }
       }, 100);
-    } else if (!location.hash) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (!location.hash && (!isSamePage || location.pathname === '/services')) {
+      window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
     }
+    
+    lastPathname.current = location.pathname;
   }, [location, services]);
 
   useEffect(() => {

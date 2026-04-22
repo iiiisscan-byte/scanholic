@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export function Tech() {
   const [contents, setContents] = useState<any>({});
   const location = useLocation();
+  const lastPathname = useRef(location.pathname);
 
   useEffect(() => {
     fetch('/api/contents')
@@ -14,16 +15,22 @@ export function Tech() {
   }, []);
 
   useEffect(() => {
+    const isSamePage = lastPathname.current === location.pathname;
+    
     if (location.hash) {
       setTimeout(() => {
         const element = document.getElementById(location.hash.slice(1));
         if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
+          element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
         }
       }, 100);
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else if (!isSamePage || location.pathname === '/tech') {
+       // Only scroll to top if we didn't just have a hash change on the same page
+       // Or if the user navigated to the exact same path without a hash
+       window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
     }
+    
+    lastPathname.current = location.pathname;
   }, [location]);
 
   return (
