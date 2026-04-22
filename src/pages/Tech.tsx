@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 
 export function Tech() {
@@ -14,16 +14,14 @@ export function Tech() {
       .catch(err => console.error(err));
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const isSamePage = lastPathname.current === location.pathname;
     
     if (location.hash) {
-      setTimeout(() => {
-        const element = document.getElementById(location.hash.slice(1));
-        if (element) {
-          element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
-        }
-      }, 100);
+      const element = document.getElementById(location.hash.slice(1));
+      if (element) {
+        element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
+      }
     } else if (!isSamePage || location.pathname === '/tech') {
        // Only scroll to top if we didn't just have a hash change on the same page
        // Or if the user navigated to the exact same path without a hash

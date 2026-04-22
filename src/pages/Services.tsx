@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import * as LucideIcons from 'lucide-react';
 
@@ -16,16 +16,14 @@ export function Services() {
       .catch(err => console.error('Failed to fetch services:', err));
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const isSamePage = lastPathname.current === location.pathname;
 
     if (location.hash && services.length > 0) {
-      setTimeout(() => {
-        const element = document.getElementById(location.hash.slice(1));
-        if (element) {
-          element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
-        }
-      }, 100);
+      const element = document.getElementById(location.hash.slice(1));
+      if (element) {
+        element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
+      }
     } else if (!location.hash && (!isSamePage || location.pathname === '/services')) {
       window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
     }
