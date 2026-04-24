@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronLeft, ChevronRight, ArrowRight, MessageCircle, X, Send } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import * as LucideIcons from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -39,10 +39,6 @@ const heroSlides = [
 
 export function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<{role: 'user' | 'ai', text: string}[]>([]);
-  const [isTyping, setIsTyping] = useState(false);
   const [contents, setContents] = useState<any>(null);
   const [services, setServices] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -106,29 +102,6 @@ export function Home() {
     }, 10000);
     return () => clearInterval(timer);
   }, [dynamicSlides.length]);
-
-  const handleSendMessage = async () => {
-    if (!chatMessage.trim()) return;
-    
-    const userMsg = chatMessage;
-    setChatMessage('');
-    setChatHistory(prev => [...prev, { role: 'user', text: userMsg }]);
-    setIsTyping(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMsg }),
-      });
-      const data = await response.json();
-      setChatHistory(prev => [...prev, { role: 'ai', text: data.response }]);
-    } catch (error) {
-      setChatHistory(prev => [...prev, { role: 'ai', text: "서버가 아직 준비되지 않았습니다. 파이썬 서버를 확인해 주세요!" }]);
-    } finally {
-      setIsTyping(false);
-    }
-  };
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % dynamicSlides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + dynamicSlides.length) % dynamicSlides.length);
@@ -281,75 +254,6 @@ export function Home() {
           </div>
         </div>
       </section>
-
-      {/* AI Chatbot Widget */}
-      <div className="fixed bottom-8 right-8 z-50">
-        <AnimatePresence>
-          {isChatOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              className="bg-white rounded-2xl shadow-2xl border border-gray-200 w-80 md:w-96 mb-4 flex flex-col h-[500px] overflow-hidden"
-            >
-              <div className="p-4 bg-gradient-to-r from-blue-600 to-violet-600 text-white flex justify-between items-center shadow-md z-10">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse shadow-[0_0_8px_rgba(74,222,128,0.8)]" />
-                  <span className="font-bold tracking-wide">스캔홀릭 AI 상담사</span>
-                </div>
-                <button onClick={() => setIsChatOpen(false)} className="hover:bg-white/20 p-1 rounded-full transition-colors"><X className="w-5 h-5" /></button>
-              </div>
-              
-              <div className="flex-1 p-4 overflow-y-auto space-y-4 bg-gray-50">
-                {chatHistory.length === 0 && (
-                  <p className="text-gray-500 text-sm text-center py-8">디지털화 서비스에 대해 무엇이든 물어보세요!</p>
-                )}
-                {chatHistory.map((msg, i) => (
-                  <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-[80%] p-3 rounded-2xl text-sm leading-relaxed ${
-                      msg.role === 'user' ? 'bg-gradient-to-r from-blue-600 to-violet-600 text-white rounded-tr-none shadow-md' : 'bg-white border border-gray-200 text-gray-800 rounded-tl-none shadow-sm'
-                    }`}>
-                      {msg.text}
-                    </div>
-                  </div>
-                ))}
-                {isTyping && (
-                  <div className="flex justify-start">
-                    <div className="bg-white border border-gray-200 p-3 rounded-2xl rounded-tl-none shadow-sm text-gray-500 text-sm flex gap-1">
-                      <span className="animate-bounce">.</span><span className="animate-bounce delay-75">.</span><span className="animate-bounce delay-150">.</span>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div className="p-4 border-t border-gray-200 bg-white">
-                <form onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }} className="flex gap-2">
-                  <input
-                    type="text"
-                    value={chatMessage}
-                    onChange={(e) => setChatMessage(e.target.value)}
-                    placeholder="메시지를 입력하세요..."
-                    className="flex-1 bg-gray-100 border-none rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-blue-500 focus:bg-white transition-colors outline-none"
-                  />
-                  <button type="submit" className="bg-gradient-to-r from-blue-600 to-violet-600 text-white p-3 rounded-lg hover:shadow-lg transition-all active:scale-95 flex items-center justify-center min-w-[3rem]">
-                    <Send className="w-5 h-5 ml-1" />
-                  </button>
-                </form>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => setIsChatOpen(!isChatOpen)}
-          className="relative bg-gradient-to-r from-blue-600 to-violet-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center group"
-        >
-          <div className="absolute inset-0 rounded-full bg-blue-500 animate-ping opacity-30 group-hover:opacity-50" style={{ animationDuration: '2s' }} />
-          {isChatOpen ? <X className="w-7 h-7 relative z-10" /> : <MessageCircle className="w-7 h-7 relative z-10" />}
-        </motion.button>
-      </div>
     </div>
   );
 }
