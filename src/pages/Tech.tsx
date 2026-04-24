@@ -4,32 +4,50 @@ import { useLocation } from 'react-router-dom';
 
 export function Tech() {
   const [contents, setContents] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(true);
   const location = useLocation();
   const lastPathname = useRef(location.pathname);
 
   useEffect(() => {
     fetch('/api/contents')
       .then(res => res.json())
-      .then(data => setContents(data))
-      .catch(err => console.error(err));
+      .then(data => {
+        setContents(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error(err);
+        setIsLoading(false);
+      });
   }, []);
 
   useLayoutEffect(() => {
+    if (isLoading) return;
+
     const isSamePage = lastPathname.current === location.pathname;
     
     if (location.hash) {
-      const element = document.getElementById(location.hash.slice(1));
-      if (element) {
-        element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
-      }
+      // DOM 업데이트 직후 요소를 찾기 위해 약간의 지연
+      setTimeout(() => {
+        const element = document.getElementById(location.hash.slice(1));
+        if (element) {
+          element.scrollIntoView({ behavior: isSamePage ? 'smooth' : 'auto' });
+        }
+      }, 0);
     } else if (!isSamePage || location.pathname === '/tech') {
-       // Only scroll to top if we didn't just have a hash change on the same page
-       // Or if the user navigated to the exact same path without a hash
        window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
     }
     
     lastPathname.current = location.pathname;
-  }, [location]);
+  }, [location, isLoading]);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[80vh] flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
