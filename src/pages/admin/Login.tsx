@@ -53,7 +53,7 @@ export function Login() {
           <p className="text-gray-500">스캔홀릭 관리자 대시보드</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6" autoComplete="off">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               아이디
@@ -69,6 +69,7 @@ export function Login() {
                 className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-black"
                 placeholder="관리자 아이디를 입력하세요"
                 required
+                autoComplete="off"
               />
             </div>
           </div>
@@ -88,6 +89,7 @@ export function Login() {
                 className="pl-10 w-full px-4 py-3 border border-gray-300 rounded-xl outline-none focus:ring-2 focus:ring-black"
                 placeholder="비밀번호를 입력하세요"
                 required
+                autoComplete="new-password"
               />
             </div>
           </div>

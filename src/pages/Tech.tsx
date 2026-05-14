@@ -25,7 +25,7 @@ export function Tech() {
     if (isLoading) return;
 
     const isSamePage = lastPathname.current === location.pathname;
-    
+
     if (location.hash) {
       // DOM 업데이트 직후 요소를 찾기 위해 약간의 지연
       setTimeout(() => {
@@ -35,9 +35,9 @@ export function Tech() {
         }
       }, 0);
     } else if (!isSamePage || location.pathname === '/tech') {
-       window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
+      window.scrollTo({ top: 0, behavior: isSamePage ? 'smooth' : 'auto' });
     }
-    
+
     lastPathname.current = location.pathname;
   }, [location, isLoading]);
 
@@ -57,14 +57,14 @@ export function Tech() {
         transition={{ duration: 0.6 }}
       >
         <h1 className="text-4xl md:text-5xl font-bold mb-16">기술</h1>
-        
+
         <div className="space-y-24">
           <section id="image-processing" className="scroll-mt-32">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">{contents.tech_image_processing_title || '고도화된 이미지 처리'}</h2>
                 {contents.tech_image_processing_desc ? (
-                  <div 
+                  <div
                     className="text-lg text-gray-600 leading-relaxed mb-6"
                     dangerouslySetInnerHTML={{ __html: contents.tech_image_processing_desc }}
                   />
@@ -100,7 +100,7 @@ export function Tech() {
               <div className="order-1 lg:order-2">
                 <h2 className="text-3xl font-bold mb-6">{contents.tech_ocr_title || 'OCR (광학 문자 인식)'}</h2>
                 {contents.tech_ocr_desc ? (
-                  <div 
+                  <div
                     className="text-lg text-gray-600 leading-relaxed mb-6"
                     dangerouslySetInnerHTML={{ __html: contents.tech_ocr_desc }}
                   />
