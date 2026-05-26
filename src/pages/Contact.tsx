@@ -89,7 +89,7 @@ export function Contact() {
             </div>
             <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
               <h3 className="text-lg font-bold mb-2">이메일 문의</h3>
-              <p className="text-xl font-bold text-black">scanholic25@gmail.com</p>
+              <p className="text-xl font-bold text-black">scanholic@kjnsys.com</p>
             </div>
           </div>
         </div>

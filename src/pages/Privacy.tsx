@@ -82,9 +82,8 @@ export function Privacy() {
             <p>회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제 등을 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.</p>
             <div className="bg-gray-50 border border-gray-200 p-6 rounded-lg mt-4">
               <ul className="space-y-2 text-sm">
-                <li><strong>성명 (직책):</strong> 홍길동 대표 (수정요망)</li>
+                <li><strong>성명:</strong> 김영덕</li>
                 <li><strong>연락처:</strong> 031-273-9175</li>
-                <li><strong>이메일:</strong> scanholic25@gmail.com</li>
               </ul>
             </div>
           </section>

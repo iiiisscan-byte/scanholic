@@ -62,7 +62,7 @@ export function Location() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900 mb-1">이메일</h3>
-                    <p className="text-gray-600">scanholic25@gmail.com</p>
+                    <p className="text-gray-600">scanholic@kjnsys.com</p>
                   </div>
                 </div>
 

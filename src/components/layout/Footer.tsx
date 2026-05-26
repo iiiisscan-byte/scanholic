@@ -13,8 +13,8 @@ export function Footer() {
             </p>
             <address className="not-italic text-sm text-gray-400 leading-relaxed">
               경기도 용인시 기흥구 흥덕1로 13, 흥덕IT밸리 컴플렉스 B동 508호<br />
-              사업자번호 : 124-52-67965 &nbsp;|&nbsp; 대표자 : 김수연<br />
-              전화 : <a href="tel:031-273-9175" className="hover:text-white transition-colors">031-273-9175</a> &nbsp;|&nbsp; 이메일 : <a href="mailto:scanholic25@gmail.com" className="hover:text-white transition-colors">scanholic25@gmail.com</a>
+              사업자번호 : 124-86-12790 &nbsp;|&nbsp; 대표자 : 승인배<br />
+              전화 : <a href="tel:031-273-9175" className="hover:text-white transition-colors">031-273-9175</a> &nbsp;|&nbsp; 팩스 : 031-660-7066
             </address>
           </div>
           
