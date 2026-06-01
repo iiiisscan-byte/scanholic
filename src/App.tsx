@@ -60,8 +60,24 @@ export default function App() {
       }
     };
 
+    const recordVisitor = async () => {
+      if (window.location.pathname.startsWith('/admin')) {
+        return;
+      }
+      const hasVisited = sessionStorage.getItem('visited_today');
+      if (!hasVisited) {
+        try {
+          await fetch('/api/visitors/increment', { method: 'POST' });
+          sessionStorage.setItem('visited_today', 'true');
+        } catch (error) {
+          console.error('Failed to record visitor:', error);
+        }
+      }
+    };
+
     fetchSettings();
     fetchPopups();
+    recordVisitor();
   }, []);
 
   return (

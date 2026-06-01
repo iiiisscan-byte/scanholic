@@ -6,6 +6,17 @@ export function Dashboard() {
   const navigate = useNavigate();
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
+  const [visitorCount, setVisitorCount] = useState<number>(0);
+
+  const fetchVisitorCount = async () => {
+    try {
+      const res = await fetch('/api/visitors/today');
+      const data = await res.json();
+      setVisitorCount(data.count || 0);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     fetch('/api/admin/inquiries')
@@ -17,14 +28,33 @@ export function Dashboard() {
       .then(res => res.json())
       .then(data => setServices(data))
       .catch(err => console.error(err));
+
+    fetchVisitorCount();
   }, []);
+
+  const handleResetVisitors = async () => {
+    if (confirm('오늘의 방문자 통계를 초기화하시겠습니까?')) {
+      try {
+        const response = await fetch('/api/visitors/reset', { method: 'POST' });
+        if (response.ok) {
+          setVisitorCount(0);
+          alert('방문자 수가 초기화되었습니다.');
+        } else {
+          alert('초기화에 실패했습니다.');
+        }
+      } catch (error) {
+        console.error(error);
+        alert('에러가 발생했습니다.');
+      }
+    }
+  };
 
   const pendingCount = inquiries.filter(inq => inq.status === 'pending').length;
   const completedCount = inquiries.filter(inq => inq.status === 'completed').length;
   const recentInquiries = inquiries.slice(0, 3);
 
   const stats = [
-    { title: '오늘의 방문자', value: '1,234', icon: Users, change: '+12%' },
+    { title: '오늘의 방문자', value: visitorCount.toLocaleString(), icon: Users, change: '집계중' },
     { title: '대기중인 문의', value: pendingCount.toString(), icon: MessageSquare, change: pendingCount > 0 ? `+${pendingCount}` : '0' },
     { title: '운영중인 서비스', value: services.length.toString(), icon: FileText, change: '0%' },
     { title: '처리 완료된 문의', value: completedCount.toString(), icon: CheckCircle, change: completedCount > 0 ? `+${completedCount}` : '0' },
@@ -83,7 +113,7 @@ export function Dashboard() {
 
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
           <h2 className="text-lg font-bold mb-4">빠른 작업</h2>
-          <div className="grid grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <button 
               onClick={() => navigate('/admin/services')}
               className="p-4 border border-gray-200 rounded-lg text-left hover:bg-gray-50 transition-colors"
@@ -91,6 +121,14 @@ export function Dashboard() {
               <FileText className="w-6 h-6 text-black mb-2" />
               <span className="block font-medium text-gray-900">디지털화 시나리오 추가</span>
               <span className="text-xs text-gray-500">서비스/작업물을 관리하세요.</span>
+            </button>
+            <button 
+              onClick={handleResetVisitors}
+              className="p-4 border border-red-100 rounded-lg text-left hover:bg-red-50 hover:border-red-200 transition-colors"
+            >
+              <Users className="w-6 h-6 text-red-600 mb-2" />
+              <span className="block font-medium text-red-900">오늘의 방문자 수 초기화</span>
+              <span className="text-xs text-red-500">현재까지 집계된 방문자 통계를 리셋합니다.</span>
             </button>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import os
+import datetime
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -233,6 +234,36 @@ async def delete_inquiry(inquiry_id: int):
 async def create_inquiry(inquiry: InquiryCreate):
     supabase.table("inquiries").insert(inquiry.dict()).execute()
     return {"message": "상담 예약이 접수되었습니다. 곧 연락드리겠습니다!"}
+
+# --- 방문자 통계 API ---
+@app.post("/api/visitors/increment")
+async def increment_visitor():
+    today = datetime.date.today().isoformat()
+    response = supabase.table("visitor_stats").select("count").eq("date", today).execute()
+    if response.data:
+        current_count = response.data[0]["count"]
+        supabase.table("visitor_stats").update({"count": current_count + 1}).eq("date", today).execute()
+    else:
+        supabase.table("visitor_stats").insert({"date": today, "count": 1}).execute()
+    return {"message": "Visitor count incremented"}
+
+@app.get("/api/visitors/today")
+async def get_today_visitors():
+    today = datetime.date.today().isoformat()
+    response = supabase.table("visitor_stats").select("count").eq("date", today).execute()
+    if response.data:
+        return {"count": response.data[0]["count"]}
+    return {"count": 0}
+
+@app.post("/api/visitors/reset")
+async def reset_visitors():
+    today = datetime.date.today().isoformat()
+    # 모든 기존 데이터를 삭제하여 방문자 통계 초기화
+    supabase.table("visitor_stats").delete().neq("count", -1).execute()
+    # 오늘 데이터를 0으로 초기화
+    supabase.table("visitor_stats").insert({"date": today, "count": 0}).execute()
+    return {"message": "Visitor stats reset successfully"}
+
 
 @app.post("/api/chat")
 async def chat_with_ai(request: ChatRequest):
